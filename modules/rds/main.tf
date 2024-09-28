@@ -1,7 +1,7 @@
 data "aws_vpc" "vpc" {
   filter {
     name   = "tag:Name"
-    values = ["tc-infra-cloud-vpc"]
+    values = ["tc-vpc"]
   }
 }
 
