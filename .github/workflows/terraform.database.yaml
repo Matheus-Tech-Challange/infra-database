@@ -1,0 +1,47 @@
+name: Terraform Infra Database Deployment
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checar o código do repositório
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Instalar o Terraform CLI
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.0  # Versão do Terraform que você deseja usar
+
+      # Step 3: Configurar credenciais AWS usando os segredos armazenados no GitHub
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1  # Substitua pela região correta
+
+      # Step 4: Inicializar o Terraform
+      - name: Terraform Init
+        run: terraform init
+
+      # Step 5: Planejar as mudanças de infraestrutura
+      - name: Terraform Plan
+        run: terraform plan
+
+      # Step 6: Aplicar as mudanças no merge
+      - name: Terraform Apply
+        #if: github.event_name == 'push'
+        run: terraform apply -auto-approve

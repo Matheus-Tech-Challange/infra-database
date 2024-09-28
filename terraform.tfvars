@@ -1,0 +1,5 @@
+vpc_cidr_block = "10.0.0.0/16"
+rds_cluster_identifier = "database"
+db_user = "app"
+db_password = "F4QBA65385t46"
+db_port = "3306"
