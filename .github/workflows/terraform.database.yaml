@@ -37,11 +37,8 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      # Step 5: Planejar as mudanças de infraestrutura
-      - name: Terraform Plan
-        run: terraform plan
-
       # Step 6: Aplicar as mudanças no merge
       - name: Terraform Apply
-        #if: github.event_name == 'push'
+        env: 
+          TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
         run: terraform apply -auto-approve
